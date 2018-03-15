@@ -34,6 +34,4 @@ class Handshake() extends CoreDevice() {
   	when(toEnv.S.Resp === OcpResp.DVA){
   		toEnv.M := fromRegM
   	}
-
-
 }
