@@ -13,16 +13,26 @@ class Handshake() extends CoreDevice() {
 
   	val fromRegM = Reg(OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH))
   	val fromRegTemp = Reg(OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH))
-  	val toRegS = Reg(OcpCoreMasterPort(ADDR_WIDTH, DATA_WIDTH))
+  	val toRegM = Reg(OcpCoreMasterPort(ADDR_WIDTH, DATA_WIDTH))
+  	val enable_reg = Reg(next = toEnv.S)
 
   	val fromRegSResp = Reg(init = OcpResp.NULL )
   	val fromRegSData = Reg(init = Bits(0, DATA_WIDTH))
 
-  	when(toRegS.Resp === OcpResp.DVA){
+  	when(enable_reg.Resp === OcpResp.DVA){
   		fromRegM := fromEnv.M
   		fromRegTemp := fromEnv.M
-  	} .elsewhen(toRegS.Resp === OcpResp.NULL){
+
+  	} .elsewhen(enable_reg.Resp === OcpResp.NULL){
   		fromRegM := fromRegTemp
+
+  	} .otherwise{
+  		enable_reg := toEnv.S
+  		fromEnv.S := toEnv.S
+  	}
+
+  	when(toEnv.S.Resp === OcpResp.DVA){
+  		toEnv.M := fromRegM
   	}
 
 
