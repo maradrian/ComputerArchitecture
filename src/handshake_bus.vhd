@@ -43,11 +43,7 @@ begin
 
 CL:  process(enable_reg, reg0_data, reg0_addr, reg0_valid, master_in)
   begin
-  --  nextMux_data <= master_in.data;
-  --  nextMux_addr <= master_in.addr;
-   -- nextMux_valid <= master_in.valid;
-    
-    --slave_out.ready <= enable_reg;
+  
     case enable_reg is
         when '0' =>
             -- if ready_in (delayed) is not ready, we have to store the data.
@@ -80,23 +76,14 @@ begin
             reg0_data <= master_in.data;
             reg0_addr <= master_in.addr;
             reg0_valid <= master_in.valid; 
-       -- else
-      --      reg0_data <= reg0_data;    
-       --     reg0_addr <= reg0_addr;    
-       --     reg0_valid <= reg0_valid; 
         end if;
         -- this updates the output, which is purely based on the ready in.
         if (slave_in.ready = '1') then    
             master_out.data <= nextMux_data;
             master_out.addr <= nextMux_addr;
             master_out.valid <= nextMux_valid;
-       -- else
-       --     nextMux_data <= nextMux_data;
-       --     nextMux_addr <= nextMux_addr;
-      --      nextMux_valid <= nextMux_valid;
         end if;
         -- this enable signal is always updated, to ensure correct transfer of data
-        --slave_out.ready <= enable_reg;
         slave_out.ready <= slave_in.ready;
         enable_reg <= slave_in.ready;
     end if;
