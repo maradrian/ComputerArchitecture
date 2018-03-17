@@ -1,0 +1,83 @@
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Initial source changes: [0m
+[0m[[0mdebug[0m] [0m[naha] 	removed:Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	added: Set(/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] 	modified: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated products: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] External API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Modified binary dependencies: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set(/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Sources indirectly invalidated by:[0m
+[0m[[0mdebug[0m] [0m[naha] 	product: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	binary dep: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	external source: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Recompiling all 1 sources: invalidated sources (1) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/target/scala-2.10/classes...[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.13:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.13:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 6ab4211d, interfacing (CompilerInterface) with Scala compiler version 2.10.6[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/classes:/home/patmos/.sbt/boot/scala-2.10.6/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/target/scala-2.10/classes[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:9: not found: object Chisel[0m
+[0m[[31merror[0m] [0mimport Chisel._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:10: not found: object ocp[0m
+[0m[[31merror[0m] [0mimport ocp._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:11: not found: object patmos[0m
+[0m[[31merror[0m] [0mimport patmos.Constants._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:33: not found: type Tester[0m
+[0m[[31merror[0m] [0mclass OCP_TEST(dut: Handshake) extends Tester(dut) {[0m
+[0m[[31merror[0m] [0m                                       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:33: not found: type Handshake[0m
+[0m[[31merror[0m] [0mclass OCP_TEST(dut: Handshake) extends Tester(dut) {[0m
+[0m[[31merror[0m] [0m                    ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:33: too many arguments for constructor Object: ()Object[0m
+[0m[[31merror[0m] [0mclass OCP_TEST(dut: Handshake) extends Tester(dut) {[0m
+[0m[[31merror[0m] [0m              ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:35: not found: value poke[0m
+[0m[[31merror[0m] [0m  poke(dut.io.ocp.M.Cmd, OcpCmd.WR)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:36: not found: value poke[0m
+[0m[[31merror[0m] [0m  poke(dut.io.ocp.M.Data, UInt(15))[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:37: not found: value poke[0m
+[0m[[31merror[0m] [0m  poke(dut.io.ocp.M.Addr, "he8000003")[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:39: not found: value step[0m
+[0m[[31merror[0m] [0m  step(1)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:41: not found: value peek[0m
+[0m[[31merror[0m] [0m  peek(dut.io.ocp.S.Resp, OcpResp.DVA)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:43: not found: value step[0m
+[0m[[31merror[0m] [0m  step(1)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:45: not found: value poke[0m
+[0m[[31merror[0m] [0m  poke(dut.io.ocp.M.Cmd, OcpCmd.RD)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:46: not found: value poke[0m
+[0m[[31merror[0m] [0m  poke(dut.io.ocp.M.Addr, "he8000003")[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:48: not found: value step[0m
+[0m[[31merror[0m] [0m  step(1)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:50: not found: value peek[0m
+[0m[[31merror[0m] [0m  peek(dut.io.ocp.S.Data, UInt(15))[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:51: not found: value peek[0m
+[0m[[31merror[0m] [0m  peek(dut.io.ocp.S.Resp, OcpResp.DVA)[0m
+[0m[[31merror[0m] [0m  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/patmos/hardware/src/main/scala/NOC/TEST/OCP_TEST.scala:56: not found: value chiselMainTest[0m
+[0m[[31merror[0m] [0m    chiselMainTest(Array("--genHarness", "--test", "--backend", "c",[0m
+[0m[[31merror[0m] [0m    ^[0m
+[0m[[31merror[0m] [0m18 errors found[0m
+[0m[[0mdebug[0m] [0mCompilation failed (CompilerInterface)[0m
+[0m[[31merror[0m] [0m(compile:[31mcompileIncremental[0m) Compilation failed[0m

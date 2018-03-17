@@ -1,0 +1,164 @@
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Initial source changes: [0m
+[0m[[0mdebug[0m] [0m[naha] 	removed:Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	added: Set(/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala, /home/patmos/t-crest/NOC/Chisel-src/Ocp.scala, /home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] 	modified: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Invalidated products: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] External API changes: API Changes: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Modified binary dependencies: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] Initial directly invalidated sources: Set(/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala, /home/patmos/t-crest/NOC/Chisel-src/Ocp.scala, /home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] [0m
+[0m[[0mdebug[0m] [0m[naha] Sources indirectly invalidated by:[0m
+[0m[[0mdebug[0m] [0m[naha] 	product: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	binary dep: Set()[0m
+[0m[[0mdebug[0m] [0m[naha] 	external source: Set()[0m
+[0m[[0mdebug[0m] [0mAll initially invalidated sources: Set(/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala, /home/patmos/t-crest/NOC/Chisel-src/Ocp.scala, /home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Initial set of included nodes: Set(/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala, /home/patmos/t-crest/NOC/Chisel-src/Ocp.scala, /home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala)[0m
+[0m[[0mdebug[0m] [0m[naha] Recompiling all 3 sources: invalidated sources (3) exceeded 50.0% of all sources[0m
+[0m[[0minfo[0m] [0mCompiling 3 Scala sources to /home/patmos/t-crest/NOC/Chisel-src/target/scala-2.10/classes...[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.13:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mGetting org.scala-sbt:compiler-interface:0.13.13:component from component compiler for Scala 2.10.6[0m
+[0m[[0mdebug[0m] [0mRunning cached compiler 4083bc2a, interfacing (CompilerInterface) with Scala compiler version 2.10.6[0m
+[0m[[0mdebug[0m] [0mCalling Scala compiler with arguments  (CompilerInterface):[0m
+[0m[[0mdebug[0m] [0m	-bootclasspath[0m
+[0m[[0mdebug[0m] [0m	/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/classes:/home/patmos/.sbt/boot/scala-2.10.6/lib/scala-library.jar[0m
+[0m[[0mdebug[0m] [0m	-classpath[0m
+[0m[[0mdebug[0m] [0m	/home/patmos/t-crest/NOC/Chisel-src/target/scala-2.10/classes[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:42: not found: object Chisel[0m
+[0m[[31merror[0m] [0mimport Chisel._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:43: not found: object Node[0m
+[0m[[31merror[0m] [0mimport Node._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:47: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val IDLE = Bits("b000")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:48: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val WR   = Bits("b001")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:49: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val RD   = Bits("b010")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:59: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val NULL = Bits("b00")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:60: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val DVA  = Bits("b01")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:61: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val FAIL = Bits("b10")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:62: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val ERR  = Bits("b11")[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:69: not found: type Bundle[0m
+[0m[[31merror[0m] [0mclass OcpMasterSignals(addrWidth : Int, dataWidth : Int) extends Bundle() {[0m
+[0m[[31merror[0m] [0m                                                                 ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:70: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val Cmd = Bits(width = 3)[0m
+[0m[[31merror[0m] [0m            ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:71: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val Addr = Bits(width = addrWidth)[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:72: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val Data = Bits(width = dataWidth)[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:82: not found: type Bundle[0m
+[0m[[31merror[0m] [0mclass OcpSlaveSignals(dataWidth : Int) extends Bundle() {[0m
+[0m[[31merror[0m] [0m                                               ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:83: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val Resp = Bits(width = 2)[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/Ocp.scala:84: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val Data = Bits(width = dataWidth)[0m
+[0m[[31merror[0m] [0m             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:10: not found: object Chisel[0m
+[0m[[31merror[0m] [0mimport Chisel._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:11: not found: object Node[0m
+[0m[[31merror[0m] [0mimport Node._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:16: not found: value Bits[0m
+[0m[[31merror[0m] [0m  val ByteEn = Bits(width = dataWidth/8)[0m
+[0m[[31merror[0m] [0m               ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:26: not found: type Bundle[0m
+[0m[[31merror[0m] [0mclass OcpCoreMasterPort(addrWidth : Int, dataWidth : Int) extends Bundle() {[0m
+[0m[[31merror[0m] [0m                                                                  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:27: value asOutput is not a member of ocp.OcpCoreMasterSignals[0m
+[0m[[31merror[0m] [0m  val M = new OcpCoreMasterSignals(addrWidth, dataWidth).asOutput[0m
+[0m[[31merror[0m] [0m                                                         ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:28: value asInput is not a member of ocp.OcpSlaveSignals[0m
+[0m[[31merror[0m] [0m  val S = new OcpSlaveSignals(dataWidth).asInput[0m
+[0m[[31merror[0m] [0m                                         ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:32: not found: type Bundle[0m
+[0m[[31merror[0m] [0mclass OcpCoreSlavePort(addrWidth : Int, dataWidth : Int) extends Bundle() {[0m
+[0m[[31merror[0m] [0m                                                                 ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:33: value asInput is not a member of ocp.OcpCoreMasterSignals[0m
+[0m[[31merror[0m] [0m  val M = new OcpCoreMasterSignals(addrWidth, dataWidth).asInput[0m
+[0m[[31merror[0m] [0m                                                         ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:34: value asOutput is not a member of ocp.OcpSlaveSignals[0m
+[0m[[31merror[0m] [0m  val S = new OcpSlaveSignals(dataWidth).asOutput[0m
+[0m[[31merror[0m] [0m                                         ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:45: not found: type Module[0m
+[0m[[31merror[0m] [0mclass OcpCoreBus(addrWidth : Int, dataWidth : Int) extends Module {[0m
+[0m[[31merror[0m] [0m                                                           ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:46: not found: type Bundle[0m
+[0m[[31merror[0m] [0m  val io = new Bundle {[0m
+[0m[[31merror[0m] [0m               ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpCore.scala:50: value <> is not a member of ocp.OcpCoreMasterPort[0m
+[0m[[31merror[0m] [0m  io.master <> io.slave[0m
+[0m[[31merror[0m] [0m            ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:1: not found: object Chisel[0m
+[0m[[31merror[0m] [0mimport Chisel._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:2: not found: object Node[0m
+[0m[[31merror[0m] [0mimport Node._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:3: not found: object patmos[0m
+[0m[[31merror[0m] [0mimport patmos.Constants._[0m
+[0m[[31merror[0m] [0m       ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:8: not found: type CoreDevice[0m
+[0m[[31merror[0m] [0mclass Handshake() extends CoreDevice() {[0m
+[0m[[31merror[0m] [0m                          ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:9: not found: type Bundle[0m
+[0m[[31merror[0m] [0m    val io = new Bundle() {[0m
+[0m[[31merror[0m] [0m                 ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:10: not found: value ADDR_WIDTH[0m
+[0m[[31merror[0m] [0m    	val fromEnv = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)[0m
+[0m[[31merror[0m] [0m    	                                   ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:10: not found: value DATA_WIDTH[0m
+[0m[[31merror[0m] [0m    	val fromEnv = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)[0m
+[0m[[31merror[0m] [0m    	                                               ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:11: not found: value ADDR_WIDTH[0m
+[0m[[31merror[0m] [0m    	val toEnv = new OcpCoreMasterPort(ADDR_WIDTH, DATA_WIDTH)[0m
+[0m[[31merror[0m] [0m    	                                  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:11: not found: value DATA_WIDTH[0m
+[0m[[31merror[0m] [0m    	val toEnv = new OcpCoreMasterPort(ADDR_WIDTH, DATA_WIDTH)[0m
+[0m[[31merror[0m] [0m    	                                              ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:14: not found: value Reg[0m
+[0m[[31merror[0m] [0m  	val fromRegM = Reg(OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH))[0m
+[0m[[31merror[0m] [0m  	               ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:15: not found: value Reg[0m
+[0m[[31merror[0m] [0m  	val fromRegTemp = Reg(OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH))[0m
+[0m[[31merror[0m] [0m  	                  ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:16: not found: value Reg[0m
+[0m[[31merror[0m] [0m  	val toRegM = Reg(OcpCoreMasterPort(ADDR_WIDTH, DATA_WIDTH))[0m
+[0m[[31merror[0m] [0m  	             ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:17: not found: value Reg[0m
+[0m[[31merror[0m] [0m  	val enable_reg = Reg(next = toEnv.S)[0m
+[0m[[31merror[0m] [0m  	                 ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:19: not found: value Reg[0m
+[0m[[31merror[0m] [0m  	val fromRegSResp = Reg(init = OcpResp.NULL )[0m
+[0m[[31merror[0m] [0m  	                   ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:20: not found: value Reg[0m
+[0m[[31merror[0m] [0m  	val fromRegSData = Reg(init = Bits(0, DATA_WIDTH))[0m
+[0m[[31merror[0m] [0m  	                   ^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:22: not found: value when[0m
+[0m[[31merror[0m] [0m  	when(enable_reg.Resp === OcpResp.DVA){[0m
+[0m[[31merror[0m] [0m  	^[0m
+[0m[[31merror[0m] [0m/home/patmos/t-crest/NOC/Chisel-src/OcpHandshake.scala:34: not found: value when[0m
+[0m[[31merror[0m] [0m  	when(toEnv.S.Resp === OcpResp.DVA){[0m
+[0m[[31merror[0m] [0m  	^[0m
+[0m[[31merror[0m] [0m45 errors found[0m
+[0m[[0mdebug[0m] [0mCompilation failed (CompilerInterface)[0m
+[0m[[31merror[0m] [0m(compile:[31mcompileIncremental[0m) Compilation failed[0m

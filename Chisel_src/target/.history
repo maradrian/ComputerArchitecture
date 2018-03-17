@@ -1,0 +1,4 @@
+runMain  OcpHandshake.scala
+runMain OcpHanshake
+runMain OcpHanshake.scala
+exit
