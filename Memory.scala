@@ -4,41 +4,47 @@ import Chisel._
 
 class Memory() extends Module(){
   val io = IO(new Bundle{
-	val addr = Input(UInt(16.W))
-	val dataIn = Input(UInt(32.W))
-	val dataOut = Output(UInt(32.W))
+	val addr = Input(UInt(width = 16))
+	val dataIn = Input(UInt(width = 32))
+	val dataOut = Output(UInt(width = 32))
 	val enable = Input(Bool())
      })
-  
-  val mem = SyncReadMem(65536, UInt(32.W))
-  mem.write(addr, dataIn)
-  dataOut := mem.read(addr, enable)
+   val syncMem = Mem(UInt(width=32), 65536, seqRead=true)
+   
+    when(io.enable === Bool(true) ) {
+      syncMem(io.addr) := io.dataIn
+
+  }
+
+  // read
+  val rdAddrReg = Reg(next = io.addr)
+  io.dataOut := syncMem(rdAddrReg)
 }
 
 class MemoryTest(dut: Memory) extends Tester(dut){
   //first write some data
-  poke(dut.io.enable, false.B)
-  poke(dut.io.dataIn, "h_dead_beef".asUInt(32.W))
-  poke(dut.io.addr, "h_000f".asUInt(16.W))
+  poke(dut.io.enable, true)
+  poke(dut.io.dataIn, 0xdeadbeef)
+  poke(dut.io.addr, 0x000f)
   step(1)
-  poke(dut.io.enable, false.B)
-  poke(dut.io.dataIn, "h_0000_123a".asUInt(32.W))
-  poke(dut.io.addr, "h_0003".asUInt(16.W))
+  poke(dut.io.enable, true)
+  poke(dut.io.dataIn, 0x0000123a)
+  poke(dut.io.addr, 0x0003)
   step(1)
-  poke(dut.io.enable, false.B)
-  poke(dut.io.dataIn, "h_2000_2000".asUInt(32.W))
-  poke(dut.io.addr, "h_fffe".asUInt(16.W))
+  poke(dut.io.enable, true)
+  poke(dut.io.dataIn, 0x20002000)
+  poke(dut.io.addr, 0xfffe)
   step(1)
   
   //now let`s read them
-  poke(dut.io.enable, true.B)
-  poke(dut.io.addr, "h_000f".asUInt(16.W))
+  poke(dut.io.enable, false)
+  poke(dut.io.addr, 0x000f)
   step(1)
-  poke(dut.io.enable, true.B)
-  poke(dut.io.addr, "h_0003".asUInt(16.W))
+  poke(dut.io.enable, false)
+  poke(dut.io.addr, 0x0003)
   step(1)
-  poke(dut.io.enable, true.B)
-  poke(dut.io.addr, "h_fffe".asUInt(16.W))
+  poke(dut.io.enable, false)
+  poke(dut.io.addr, 0xfffe)
 }
 
 object MemoryTest{
@@ -46,7 +52,7 @@ object MemoryTest{
     chiselMainTest(Array("--genHarness", "--test", "--backend", "c",
       "--compile", "--vcd", "--targetDir", "generated"),
       () => Module(new Memory())) {
-        m => new MemoryTester(m)
+        m => new MemoryTest(m)
       }
   }
 }
