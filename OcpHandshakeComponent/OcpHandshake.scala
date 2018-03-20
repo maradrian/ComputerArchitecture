@@ -7,6 +7,6 @@ import patmos.Constants._
 import ocp._
 
 
-class Handshake() extends CoreDevice() {
+/*class Handshake() extends CoreDevice() {
 
-}
+}*/
