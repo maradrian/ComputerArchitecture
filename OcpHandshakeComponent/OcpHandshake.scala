@@ -14,8 +14,49 @@ class Handshake() extends Module {
       val TXReady = Input(Bool())//handshake needs to wait until TX component is ready
       val TXValid = Output(Bool())//handshake has valid data
    }
-
    
+   val waitForCmd :: wr :: rd :: fromNIC :: Nil = Enum(UInt(), 4)//states cannot start with capital letters
+   val masterReg = Reg(init = io.fromCore.M)
+   val stateReg = Reg(init = waitForCmd)
+   val dataReg = Reg(init = io.toTX.S.Data)
+   
+   io.toTX.M <> masterReg
+   io.TXValid := Bool(false)
+   io.fromCore.S.Data := dataReg   
+   io.fromCore.S.Resp := OcpResp.NULL
+
+   when(stateReg === waitForCmd){
+     when(io.fromCore.M.Cmd === OcpCmd.WR){
+        masterReg := io.fromCore.M
+        stateReg := wr
+     }
+     when(io.fromCore.M.Cmd === OcpCmd.RD){
+        masterReg := io.fromCore.M
+        stateReg := rd
+     }
+     when(io.toTX.S.Resp === OcpResp.DVA){
+        dataReg := io.toTX.S.Data
+        stateReg := fromNIC
+     }
+   }
+   when(stateReg === wr){
+     io.TXValid := Bool(true)
+     when(io.TXReady === Bool(true)){
+       stateReg := waitForCmd
+       io.fromCore.S.Resp := OcpResp.DVA
+     }
+   }
+   when(stateReg === rd){
+     io.TXValid := Bool(true)
+     when(io.TXReady === Bool(true)){
+        stateReg := waitForCmd
+        io.fromCore.S.Resp := OcpResp.DVA
+     }
+   }
+   when(stateReg === fromNIC){
+      io.fromCore.S.Resp := OcpResp.DVA
+      stateReg := waitForCmd
+   }
 }
 
 class HandshakeTest(dut: Handshake) extends Tester(dut){
@@ -32,11 +73,13 @@ class HandshakeTest(dut: Handshake) extends Tester(dut){
    poke(dut.io.fromCore.M.Data, 0xdeadbeef)
    poke(dut.io.TXReady, true)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
    poke(dut.io.TXReady, true)
    peek(dut.io.fromCore.S.Resp)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    /*
     * In this part we let the handshake component wait for a few steps
@@ -56,26 +99,31 @@ class HandshakeTest(dut: Handshake) extends Tester(dut){
    poke(dut.io.TXReady, false)
    peek(dut.io.fromCore.S.Resp)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
    poke(dut.io.TXReady, false)
    peek(dut.io.fromCore.S.Resp)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
    poke(dut.io.TXReady, false)
    peek(dut.io.fromCore.S.Resp)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
    poke(dut.io.TXReady, true)
    peek(dut.io.fromCore.S.Resp)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
    poke(dut.io.TXReady, true)
    peek(dut.io.fromCore.S.Resp)
    peek(dut.io.TXValid)
+   peek(dut.io.toTX.M)
    step(1)
    /*
     * The last part of the test tests read commmand evn though we probably won`t use it
