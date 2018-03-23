@@ -7,7 +7,7 @@ import Chisel._
  * Port 1 is Read/Write
  * Port 2 is Read only
  */
-class Memory() extends Module(){
+class Memory() extends Module{
   val io = IO(new Bundle{
 	val addr = Input(UInt(width = 16))
 	val dataIn = Input(UInt(width = 32))
