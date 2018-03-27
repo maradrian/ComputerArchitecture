@@ -50,7 +50,7 @@ class Handshake() extends Module {
      io.TXValid := Bool(true)
      when(io.TXReady === Bool(true)){
         stateReg := waitForCmd
-        io.fromCore.S.Resp := OcpResp.DVA
+        //io.fromCore.S.Resp := OcpResp.DVA
      }
    }
    when(stateReg === fromNIC){
