@@ -12,32 +12,48 @@ class OcpMemoryRead() extends Module {
     val addr = Output(UInt(width = 16))
     val dataIn = Input(UInt(width = 32))
     val fromCore = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)
+    val enable = Output(Bool())
+    val dataOut = Output(UInt(width = 32))
   }
   
-  val waitForCmd :: sendBackData :: Nil = Enum(UInt(), 2)
+  val waitForCmd :: sendBackData :: writeData :: Nil = Enum(UInt(), 3)
   val stateReg = Reg(init = waitForCmd)
-  val rdAddr = Reg(UInt(width = 16))  
+  val rdAddr = Reg(UInt(width = 16)) 
+  val dataOutReg = Reg(UInt(width = 32)) 
 
   io.fromCore.S.Data := io.dataIn
   io.fromCore.S.Resp := OcpResp.NULL
   io.addr := rdAddr
-  rdAddr := io.fromCore.M.Addr(15, 0)
-  
+  io.dataOut := dataOutReg
+  io.enable := Bool(false)
 
   when (stateReg === waitForCmd){
      when(io.fromCore.M.Cmd === OcpCmd.RD){
         stateReg := sendBackData
+	rdAddr := io.fromCore.M.Addr(15, 0)
+	dataOutReg := io.fromCore.M.Data
+     }
+     when(io.fromCore.M.Cmd === OcpCmd.WR){
+        stateReg := writeData
+	rdAddr := io.fromCore.M.Addr(15, 0)
+	dataOutReg := io.fromCore.M.Data
      }
   }
   when(stateReg === sendBackData){
      stateReg := waitForCmd
      io.fromCore.S.Resp := OcpResp.DVA
   }
+  when(stateReg === writeData){
+     stateReg := waitForCmd
+     io.fromCore.S.Resp := OcpResp.DVA
+     io.enable := Bool(true)
+  }
 }
 
 class OcpMemoryReadTest(dut: OcpMemoryRead) extends Tester(dut){
-  poke(dut.io.fromCore.M.Cmd, 0x0)
-  poke(dut.io.fromCore.M.Addr, 0x0)
+  poke(dut.io.fromCore.M.Cmd, 0x1)
+  poke(dut.io.fromCore.M.Addr, 0xe8000001)
+  poke(dut.io.fromCore.M.Data, 0xdeadbeef)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
   step(1)  
@@ -45,6 +61,8 @@ class OcpMemoryReadTest(dut: OcpMemoryRead) extends Tester(dut){
   poke(dut.io.fromCore.M.Addr, 0x0)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
   step(1)  
   poke(dut.io.fromCore.M.Cmd, 0x0)
   poke(dut.io.fromCore.M.Addr, 0x0)
@@ -109,6 +127,8 @@ class MemoryAndReadConnection() extends Module{
   ocpMemoryRead.io.dataIn := memory.io.dataOut2
   ocpMemoryRead.io.fromCore.M <> io.fromCore.M 
   ocpMemoryRead.io.fromCore.S <> io.fromCore.S
+  memory.io.enable2 := ocpMemoryRead.io.enable
+  memory.io.dataIn2 := ocpMemoryRead.io.dataOut
 }
 
 class MemoryAndReadConnectionTest(dut: MemoryAndReadConnection) extends Tester(dut){
@@ -137,8 +157,9 @@ class MemoryAndReadConnectionTest(dut: MemoryAndReadConnection) extends Tester(d
   poke(dut.io.addr, 0xfffe)
   step(1)
   // now let`s issue commands from the Patmos
-  poke(dut.io.fromCore.M.Cmd, 0x0)
-  poke(dut.io.fromCore.M.Addr, 0x0)
+  poke(dut.io.fromCore.M.Cmd, 0x1)
+  poke(dut.io.fromCore.M.Addr, 0xe80000ff)
+  poke(dut.io.fromCore.M.Data, 0xdeadbeef)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
   step(1)  
@@ -153,7 +174,7 @@ class MemoryAndReadConnectionTest(dut: MemoryAndReadConnection) extends Tester(d
   peek(dut.io.fromCore.S.Resp)
   step(1)  
   poke(dut.io.fromCore.M.Cmd, 0x2)
-  poke(dut.io.fromCore.M.Addr, 0xe800000f)
+  poke(dut.io.fromCore.M.Addr, 0xe80000ff)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
   step(1)
@@ -161,6 +182,7 @@ class MemoryAndReadConnectionTest(dut: MemoryAndReadConnection) extends Tester(d
   poke(dut.io.fromCore.M.Addr, 0x0)
   peek(dut.io.fromCore.S.Resp)
   peek(dut.io.addr)
+  peek(dut.io.fromCore.S.Data)
   step(1)
   poke(dut.io.fromCore.M.Cmd, 0x2)
   poke(dut.io.fromCore.M.Addr, 0xe800fffe)
