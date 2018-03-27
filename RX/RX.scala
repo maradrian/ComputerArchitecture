@@ -1,6 +1,7 @@
 package NOC.RX
 
 import Chisel._
+import NOC.RouterEmulator._
 
 class RX() extends Module(){
 	val io = IO(new Bundle{
@@ -12,6 +13,9 @@ class RX() extends Module(){
 		val ready = Output(Bool())
 		val en = Output(Bool())
 	})//true == write
+
+	
+
 
 	io.ready := Bool(true)
 	io.en := Bool(false)
@@ -26,44 +30,71 @@ class RX() extends Module(){
 
 }
 
+class RXTop() extends Module(){
+	val io = IO(new Bundle{
+		val start = Input(Bool())
+		val ready = Output(Bool())
+		val dataOut = Output(UInt(width = 32))
+		val addr = Output(UInt(width = 16))
+		val en = Output(Bool())
+	})
+	//----------- Use this just for testing ---------------
+	val rout = Module(new RouterEmulator())
+	val rx = Module(new RX())
+	val what = io.start
 
-class RXTest(dut: RX) extends Tester(dut){
+	rout.io.ready := rx.io.ready
+	rout.io.start := what
+	io.ready := rx.io.ready
+
+	rx.io.valid := rout.io.valid
+	rx.io.packet := rout.io.packetOut
+	io.dataOut := rx.io.dataOut
+	io.addr := rx.io.addr
+	io.en := rx.io.en
+
+	//-----------------------------------------------------
+}
+
+
+class RXTest(dut: RXTop) extends Tester(dut){
   //first write some data
-  poke(dut.io.valid, true)
-  poke(dut.io.packet, 0x1)
+  poke(dut.io.start, true)
   peek(dut.io.dataOut)
   peek(dut.io.addr)
   peek(dut.io.en)
   step(1)
 
-  poke(dut.io.valid, false)
+  poke(dut.io.start, false)
   peek(dut.io.dataOut)
   peek(dut.io.addr)
   peek(dut.io.en)
   step(2)
 
-  poke(dut.io.valid, true)
-  poke(dut.io.packet, 0x2)
+  poke(dut.io.start, true)
   peek(dut.io.dataOut)
   peek(dut.io.addr)
   peek(dut.io.en)
   step(1)
 
-  poke(dut.io.valid, true)
-  poke(dut.io.packet, 0x3)
   peek(dut.io.dataOut)
   peek(dut.io.addr)
   peek(dut.io.en)
   step(1)
 
-  poke(dut.io.valid, true)
-  poke(dut.io.packet, 0x4)
+  poke(dut.io.start, false)
   peek(dut.io.dataOut)
   peek(dut.io.addr)
   peek(dut.io.en)
   step(1)
 
-  poke(dut.io.valid, false)
+  poke(dut.io.start, true)
+  peek(dut.io.dataOut)
+  peek(dut.io.addr)
+  peek(dut.io.en)
+  step(1)
+
+  poke(dut.io.start, false)
 
 }
 
@@ -71,7 +102,7 @@ object RXTest{
   def main(args: Array[String]): Unit = {
     chiselMainTest(Array("--genHarness", "--test", "--backend", "c",
       "--compile", "--vcd", "--targetDir", "generated"),
-      () => Module(new RX())) {
+      () => Module(new RXTop())) {
         m => new RXTest(m)
       }
   }
