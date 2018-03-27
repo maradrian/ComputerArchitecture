@@ -6,8 +6,6 @@ import patmos.Constants._
 import io._
 import ocp._
 
-
-<<<<<<< HEAD
 class Handshake() extends Module {
    val io = new Bundle{
       val fromCore = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)//data goes from processor
@@ -141,16 +139,4 @@ object HandshakeTest{
         m => new HandshakeTest(m)
       }
   }
-=======
-class Handshake() extends CoreDevice() {
-  val io2 = new Bundle{
-     val TXRead = Input(Bool())
-     val TXValid = Output(Bool())
-  }
-  val MPort2 = new OcpCoreMasterSignals(16, 32).asOutput
-  val SPort2 = new OcpSlaveSignals(32).asInput
 
-  val regMasterIn = Reg(init = MPort2)
-  val regTxOut  = Reg(init = regMasterIn)
->>>>>>> MemoryController
-}
