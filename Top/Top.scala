@@ -1,4 +1,4 @@
-package NOC.NIC_TEST
+package NOC.Top
 
 
 import Chisel._
@@ -7,7 +7,14 @@ import patmos.Constants._
 import io._
 import ocp._
 
+import NOC.TX._
+import NOC.RX._
+import NOC.Decoder._
+import NOC.Memory._
+import NOC.OcpHandshakeComponent._
 
+
+//import NOC._
 class Top() extends Module(){
   val io = new Bundle{
     val fromProcessor = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)
@@ -19,7 +26,7 @@ class Top() extends Module(){
     val routerReadyIn = Output(Bool()) 
   }
 
-  val ocpHanshake = Module(new Handshake())
+  val ocpHandshake = Module(new Handshake())
   val addressDecoder = Module(new AddressDecoder())
   val dataDecoder = Module(new DataDecoder())
   val ocpMemoryRead = Module(new OcpMemoryRead())

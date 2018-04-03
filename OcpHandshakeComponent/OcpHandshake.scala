@@ -33,10 +33,11 @@ class Handshake() extends Module {
         masterReg := io.fromCore.M
         stateReg := rd
      }
+     /*
      when(io.toTX.S.Resp === OcpResp.DVA){
         dataReg := io.toTX.S.Data
         stateReg := fromNIC
-     }
+     }*/
    }
    when(stateReg === wr){
      io.TXValid := Bool(true)
@@ -139,4 +140,4 @@ object HandshakeTest{
         m => new HandshakeTest(m)
       }
   }
-
+}
