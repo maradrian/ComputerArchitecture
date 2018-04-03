@@ -37,17 +37,19 @@ class RXTop() extends Module(){
 		val dataOut = Output(UInt(width = 32))
 		val addr = Output(UInt(width = 16))
 		val en = Output(Bool())
+		val dataIn = Output(UInt(width = 96))
+		val validIn = Output(Bool())
 	})
 	//----------- Use this just for testing ---------------
 	val rout = Module(new RouterEmulator())
 	val rx = Module(new RX())
 	val what = io.start
 
-	rout.io.ready := rx.io.ready
+	rout.io.readyIn := rx.io.ready
 	rout.io.start := what
 	io.ready := rx.io.ready
 
-	rx.io.valid := rout.io.valid
+	rx.io.valid := rout.io.validOut
 	rx.io.packet := rout.io.packetOut
 	io.dataOut := rx.io.dataOut
 	io.addr := rx.io.addr
