@@ -20,113 +20,104 @@ class TX() extends Module {
       	val TXValidToRouter = Output(Bool())
       	val packet = Output(UInt(width = 96))
 
-	//Look-up table for the route
+	//Data for/from Look-up table for the route
 	val dst_addr = Output(UInt(width = 4))
 	val route_out = Input(UInt(width = 15))
  }
- val unused_bits = Reg(init = Bits(0, 15))
- val cmd = Reg(init = Bits(0, 1)) //Read by default
+ val unused_bits = Reg(init = Bits(0, 16))
+ val response = Reg(init = Bits(0, 32))
+
+ //Read cmd by default
+ val cmd_signal = Bits(width = 1) 
+ cmd_signal:= Bits(0)
 
  //Obtain destination router ID	
  io.dst_addr := io.fromOCP.M.Addr(19, 16)
- val route = Reg(init = io.route_out)
 
  when(io.fromOCP.M.Cmd === OcpCmd.WR){
-        cmd := Bits(1)
- }.elsewhen(io.fromOCP.M.Cmd === OcpCmd.WR){
-        cmd := Bits(0)
+        cmd_signal := Bits(1)
+ }.elsewhen(io.fromOCP.M.Cmd === OcpCmd.RD){
+        cmd_signal := Bits(0)
  }.otherwise{
 	//Idle, do nothing
  }
 
- io.packet := Cat(unused_bits, cmd, route, io.fromOCP.M.Addr, io.fromOCP.M.Data)
+ io.packet := Cat(unused_bits, cmd_signal, io.route_out, io.fromOCP.M.Addr, io.fromOCP.M.Data)
  io.TXValidToRouter := io.TXValidFromOCP
  io.TXReadyToOCP := io.TXReadyFromRouter
 
- io.fromOCP.S.Resp := OcpResp.DVA //Just a default test
- io.fromOCP.S.Data := 0x00000000  //Default resp data  
+ io.fromOCP.S.Resp := OcpResp.DVA //Default DVA
+ io.fromOCP.S.Data := response
 }
 
-
 class TXTest(dut: TX) extends Tester(dut){
-   /*First test: write cmd, valid data and router is ready*/
-   //Write cmd
-   poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => 001
-   poke(dut.io.fromOCP.M.Addr, 0x1)
-   poke(dut.io.fromOCP.M.Data, 0x1)
+   /*Write cmd, valid data, router ready*/
+   poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => b001
+   poke(dut.io.fromOCP.M.Addr, 0xe8010001)
+   poke(dut.io.fromOCP.M.Data, 0xbadcaffe)
+   poke(dut.io.route_out, 0x7fff) //Simulate route for now - 15bits
+   
+   poke(dut.io.TXValidFromOCP, true) //Valid from OCP
+   poke(dut.io.TXReadyFromRouter, true) //Ready from Router
 
-   //Valid from OCP
-   poke(dut.io.TXValidFromOCP, 0x1)
+   peek(dut.io.fromOCP.S.Resp) 
+   peek(dut.io.fromOCP.S.Data)
+   peek(dut.io.TXValidToRouter) 
+   peek(dut.io.TXReadyToOCP) 
+   peek(dut.io.dst_addr) 
+   peek(dut.io.packet)
+   step(1)
 
-   //Ready from Router
-   poke(dut.io.TXReadyFromRouter, 0x1)
-   step(1)
-   //Accept write cmd
-   peek(dut.io.fromOCP.S.Resp) //DVA
-   peek(dut.io.fromOCP.S.Data) //0x00000000
+   /*Write cmd, NO valid data, router NOT ready*/
+   poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => b001
+   poke(dut.io.fromOCP.M.Addr, 0xe8020002)
+   poke(dut.io.fromOCP.M.Data, 0xdeadface)
+   poke(dut.io.route_out, 0x6abc) //Simulate route for now - 15bits
+   
+   poke(dut.io.TXValidFromOCP, false) //Valid from OCP
+   poke(dut.io.TXReadyFromRouter, false) //Ready from Router
 
-   poke(dut.io.fromCore.M.Cmd, 0x1)//Write command
-   poke(dut.io.fromCore.M.Addr, 0xe8000001)
-   poke(dut.io.fromCore.M.Data, 0xdeadbeef)
-   poke(dut.io.TXReady, true)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
+   peek(dut.io.fromOCP.S.Resp) 
+   peek(dut.io.fromOCP.S.Data)
+   peek(dut.io.TXValidToRouter) 
+   peek(dut.io.TXReadyToOCP) 
+   peek(dut.io.dst_addr) 
+   peek(dut.io.packet)
    step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
-   poke(dut.io.TXReady, true)
-   peek(dut.io.fromCore.S.Resp)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
+
+   /*Write cmd, valid data, router NOT ready*/
+   poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => b001
+   poke(dut.io.fromOCP.M.Addr, 0xe8030003)
+   poke(dut.io.fromOCP.M.Data, 0xdeafbabe)
+   poke(dut.io.route_out, 0x1dad) //Simulate route for now - 15bits
+   
+   poke(dut.io.TXValidFromOCP, true) //Valid from OCP
+   poke(dut.io.TXReadyFromRouter, false) //Ready from Router
+
+   peek(dut.io.fromOCP.S.Resp) 
+   peek(dut.io.fromOCP.S.Data)
+   peek(dut.io.TXValidToRouter) 
+   peek(dut.io.TXReadyToOCP) 
+   peek(dut.io.dst_addr) 
+   peek(dut.io.packet)
    step(1)
-   /*
-    * In this part we let the handshake component wait for a few steps
-    *
-    */
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Null command
-   poke(dut.io.TXReady, true)
-   peek(dut.io.TXValid)
+
+   /*Read cmd*/
+   poke(dut.io.fromOCP.M.Cmd, 0x2) //Read => b010
+   poke(dut.io.fromOCP.M.Addr, 0xe8040004)
+   poke(dut.io.fromOCP.M.Data, 0xdeafbabe)
+   poke(dut.io.route_out, 0x0111) //Simulate route for now - 15bits
+   
+   poke(dut.io.TXValidFromOCP, true) //Valid from OCP
+   poke(dut.io.TXReadyFromRouter, false) //Ready from Router
+
+   peek(dut.io.fromOCP.S.Resp) 
+   peek(dut.io.fromOCP.S.Data)
+   peek(dut.io.TXValidToRouter) 
+   peek(dut.io.TXReadyToOCP) 
+   peek(dut.io.dst_addr) 
+   peek(dut.io.packet)
    step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x1)//Write command
-   poke(dut.io.fromCore.M.Addr, 0xe8000001)
-   poke(dut.io.fromCore.M.Data, 0xdeadbeef)
-   poke(dut.io.TXReady, false)
-   peek(dut.io.TXValid)
-   step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
-   poke(dut.io.TXReady, false)
-   peek(dut.io.fromCore.S.Resp)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
-   step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
-   poke(dut.io.TXReady, false)
-   peek(dut.io.fromCore.S.Resp)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
-   step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
-   poke(dut.io.TXReady, false)
-   peek(dut.io.fromCore.S.Resp)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
-   step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
-   poke(dut.io.TXReady, true)
-   peek(dut.io.fromCore.S.Resp)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
-   step(1)
-   poke(dut.io.fromCore.M.Cmd, 0x0)//Write command
-   poke(dut.io.TXReady, true)
-   peek(dut.io.fromCore.S.Resp)
-   peek(dut.io.TXValid)
-   peek(dut.io.toTX.M)
-   step(1)
-   /*
-    * The last part of the test tests read commmand evn though we probably won`t use it
-    *
-    *
-    */
 }
 
 object TXTest{
