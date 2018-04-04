@@ -26,7 +26,6 @@ class Loopback() extends Module(){
 
   when(stateReg === waitForData){
      when(io.TXValidToRouter === Bool(true)){
-        io.TXReadyFromRouter := Bool(false)
 	stateReg := wr
         dataReg := io.packetIn
 	reg1 := io.packetIn(63, 32)
@@ -37,10 +36,7 @@ class Loopback() extends Module(){
      io.valid := Bool(true)
      io.packetOut := dataReg
      when(io.ready === Bool(true)){
-	stateReg := wrAddr
-	dataReg(95, 64):= UInt(0x0)
-        dataReg(63, 32) := UInt(0x0000fffe)
-        dataReg(31, 0) := reg1
+	stateReg := waitForData
      }
   }
   when(stateReg === wrAddr){
@@ -64,6 +60,7 @@ class LoopBackTest(dut: Loopback) extends Tester(dut){
    peek(dut.io.valid)
    poke(dut.io.ready, false)
    step(1)
+   poke(dut.io.TXValidToRouter, 0)
    peek(dut.io.TXReadyFromRouter)
    peek(dut.io.packetOut)
    peek(dut.io.valid)

@@ -25,13 +25,12 @@ class Handshake() extends Module {
    io.fromCore.S.Resp := OcpResp.NULL
 
    when(stateReg === waitForCmd){
-     when(io.fromCore.M.Cmd === OcpCmd.WR){
-        masterReg := io.fromCore.M
+     when(masterReg.Cmd === OcpCmd.WR){
         stateReg := wr
-     }
-     when(io.fromCore.M.Cmd === OcpCmd.RD){
-        masterReg := io.fromCore.M
+     }.elsewhen(masterReg.Cmd === OcpCmd.RD){
         stateReg := rd
+     }.otherwise{
+        masterReg := io.fromCore.M
      }
      /*
      when(io.toTX.S.Resp === OcpResp.DVA){
@@ -44,14 +43,17 @@ class Handshake() extends Module {
      when(io.TXReady === Bool(true)){
        stateReg := waitForCmd
        io.fromCore.S.Resp := OcpResp.DVA
+       masterReg := io.fromCore.M
      }
    }
    when(stateReg === rd){
      io.TXValid := Bool(true)
      when(io.TXReady === Bool(true)){
         stateReg := waitForCmd
+        masterReg := io.fromCore.M
         //io.fromCore.S.Resp := OcpResp.DVA
      }
+     
    }
    when(stateReg === fromNIC){
       io.fromCore.S.Resp := OcpResp.DVA

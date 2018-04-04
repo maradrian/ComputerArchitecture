@@ -16,10 +16,11 @@ class OcpMemoryRead() extends Module {
     val dataOut = Output(UInt(width = 32))
   }
   
-  val waitForCmd :: sendBackData :: writeData :: Nil = Enum(UInt(), 3)
+  val waitForCmd :: rdAddress :: sendBackData :: writeData :: Nil = Enum(UInt(), 4)
   val stateReg = Reg(init = waitForCmd)
   val rdAddr = Reg(UInt(width = 16)) 
   val dataOutReg = Reg(UInt(width = 32)) 
+  val masterReg = Reg(init = io.fromCore.M)
 
   io.fromCore.S.Data := io.dataIn
   io.fromCore.S.Resp := OcpResp.NULL
@@ -28,25 +29,30 @@ class OcpMemoryRead() extends Module {
   io.enable := Bool(false)
 
   when (stateReg === waitForCmd){
-     when(io.fromCore.M.Cmd === OcpCmd.RD){
-        stateReg := sendBackData
-	rdAddr := io.fromCore.M.Addr(15, 0)
-	dataOutReg := io.fromCore.M.Data
-     }
-     when(io.fromCore.M.Cmd === OcpCmd.WR){
+     when(masterReg.Cmd === OcpCmd.RD){
+        stateReg := rdAddress
+	rdAddr := masterReg.Addr(15, 0)
+     }.elsewhen(masterReg.Cmd === OcpCmd.WR){
         stateReg := writeData
-	rdAddr := io.fromCore.M.Addr(15, 0)
-	dataOutReg := io.fromCore.M.Data
+	rdAddr := masterReg.Addr(15, 0)
+	dataOutReg := masterReg.Data
+     }.otherwise{
+	masterReg := io.fromCore.M
      }
+  }
+  when(stateReg === rdAddress){
+     stateReg := sendBackData
   }
   when(stateReg === sendBackData){
      stateReg := waitForCmd
      io.fromCore.S.Resp := OcpResp.DVA
+     masterReg := io.fromCore.M
   }
   when(stateReg === writeData){
      stateReg := waitForCmd
      io.fromCore.S.Resp := OcpResp.DVA
      io.enable := Bool(true)
+     masterReg := io.fromCore.M
   }
 }
 
