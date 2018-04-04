@@ -6,7 +6,7 @@ import patmos.Constants._
 import io._
 import ocp._
 
-class AddressDecoder() extends Module{
+class AddressDecoder(val address : Int = 0) extends Module{
   val io = new Bundle{
      val fromPatmos   =  new OcpMasterSignals(ADDR_WIDTH, DATA_WIDTH).asInput
      val toHandshake  = new OcpMasterSignals(ADDR_WIDTH, DATA_WIDTH).asOutput
@@ -20,7 +20,7 @@ class AddressDecoder() extends Module{
   io.toHandshake.Data := UInt(0)
   io.toMemoryRead.Data := UInt(0)
 
-  when(io.fromPatmos.Addr(19, 16) === UInt(0)){
+  when(io.fromPatmos.Addr(19, 16) === UInt(address)){
      io.toMemoryRead.Cmd := io.fromPatmos.Cmd
      io.toMemoryRead.Addr := io.fromPatmos.Addr
      io.toMemoryRead.Data := io.fromPatmos.Data

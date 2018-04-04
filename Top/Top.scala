@@ -15,7 +15,7 @@ import NOC.OcpHandshakeComponent._
 
 
 //import NOC._
-class Top() extends Module(){
+class Top(val address : Int = 0) extends Module(){
   val io = new Bundle{
     val fromProcessor = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)
     val routerPacketIn = Output(UInt(width = 96))
@@ -27,7 +27,7 @@ class Top() extends Module(){
   }
 
   val ocpHandshake = Module(new Handshake())
-  val addressDecoder = Module(new AddressDecoder())
+  val addressDecoder = Module(new AddressDecoder(address))
   val dataDecoder = Module(new DataDecoder())
   val ocpMemoryRead = Module(new OcpMemoryRead())
   val memory = Module(new Memory())
