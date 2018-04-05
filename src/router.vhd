@@ -8,37 +8,26 @@ entity router is
 port( 
   clk, rst : in std_logic;
 
-  -- North input
+  -- North
   router_north_packet_in : in packet_m_type;
   router_north_ready_out: out packet_s_type;
-  -- North output
-  router_north_packet_out : out packet_m_type;
-  router_north_ready_in: in packet_s_type;
-
-  -- East input
-  router_east_packet_in : in packet_m_type;
-  router_east_ready_out: out packet_s_type;
-  -- East output
+  
+  -- East
   router_east_packet_out : out packet_m_type;
   router_east_ready_in: in packet_s_type;
-
-  -- South input
-  router_south_packet_in : in packet_m_type;
-  router_south_ready_out: out packet_s_type;
-  -- South output
+  
+  -- South
   router_south_packet_out : out packet_m_type;
   router_south_ready_in: in packet_s_type;
-
-  -- West input
+  
+  -- West
   router_west_packet_in : in packet_m_type;
   router_west_ready_out: out packet_s_type;
-  -- West output
-  router_west_packet_out : out packet_m_type;
-  router_west_ready_in: in packet_s_type;
   
   -- Local input
   router_local_packet_in : in packet_m_type;
   router_local_ready_out: out packet_s_type;
+  
   -- Local output
   router_local_packet_out : out packet_m_type;
   router_local_ready_in: in packet_s_type
@@ -160,8 +149,10 @@ east_splitter : splitter_top
 	port map(
 	    rst => rst,
         clk => clk,
-	    mPacket_in => router_east_packet_in,
-        sReady_out => router_east_ready_out,
+        --Unused ports
+	    mPacket_in.packet => (others => '0'),
+	    mPacket_in.valid => '0',
+        sReady_out => open,
         --Local output
         local_mPacket_out => east_splitter_local_east_packet,
         local_ready_in => east_splitter_local_east_ready,
@@ -185,8 +176,10 @@ south_splitter : splitter_top
 	    rst => rst,
         clk => clk,
 	
-	    mPacket_in => router_south_packet_in,
-        sReady_out => router_south_ready_out,
+	    --Unused ports
+	    mPacket_in.packet => (others => '0'),
+	    mPacket_in.valid => '0',
+        sReady_out => open,
         --Local output
         local_mPacket_out => south_splitter_local_south_packet,
         local_ready_in => south_splitter_local_south_ready,
@@ -275,9 +268,9 @@ north_unit_out : output_unit
         fourth_fifo_mPacket_in => local_splitter_north_local_packet,
         fourth_fifo_sReady_out => local_splitter_north_local_ready,
     
-        -- Mux out
-        mux_mPacket_out => router_north_packet_out,  
-        mux_sReady_in => router_north_ready_in
+        -- Mux out, Unused ports
+        mux_mPacket_out => open,  
+        mux_sReady_in.ready => '0'
 );
 
 east_unit_out : output_unit
@@ -353,9 +346,9 @@ west_unit_out : output_unit
         fourth_fifo_mPacket_in => local_splitter_west_local_packet,
         fourth_fifo_sReady_out => local_splitter_west_local_ready,
     
-        -- Mux out
-        mux_mPacket_out => router_west_packet_out,  
-        mux_sReady_in => router_west_ready_in
+        -- Mux out, Unused ports
+        mux_mPacket_out => open,  
+        mux_sReady_in.ready => '0'
 );
 
 local_unit_out : output_unit
@@ -385,5 +378,4 @@ local_unit_out : output_unit
 );
 
 -------------------------------------OUTPUT_UNIT END-------------------------------------
-
 end router_arch;
