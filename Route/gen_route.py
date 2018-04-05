@@ -82,14 +82,17 @@ def generate_luts(ids, row1, row2, row3, col1, col2, col3):
 			route = '0000000000'
 		else:
 			route = get_route(lut, 0, ids, row1, row2, row3, col1, col2, col3)
-		file.write('\t\tio.route_out := UInt(b\"'+route+'\")\n')
+		file.write('\t\tio.route_out := UInt(\"b'+route+'\")\n')
 		file.write('\t}')
 		for dest in ids:
 			if dest == 0 or dest == lut:
 				continue
 			file.write('.elsewhen(io.dst_addr === UInt(' + str(dest) + ')){\n')
-			file.write('\t\tio.route_out := UInt(b\"'+get_route(lut, dest, ids, row1, row2, row3, col1, col2, col3)+'\")\n')
+			file.write('\t\tio.route_out := UInt(\"b'+get_route(lut, dest, ids, row1, row2, row3, col1, col2, col3)+'\")\n')
 			file.write('\t}')
+		
+                file.write('.otherwise{\n')
+		file.write('\t\tio.route_out := UInt(\"b0000000000\")\n')
+		file.write('\t}')
 		file.write('\n}')
-
 generate_luts(ids, x_row1, x_row2, x_row3, y_col1, y_col2, y_col3)

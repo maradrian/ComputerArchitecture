@@ -9,20 +9,22 @@ class LUT_7() extends Module(){
 	})
 
 	when(io.dst_addr === UInt(0)){
-		io.route_out := UInt(b"1010011100")
+		io.route_out := UInt("b1010011100")
 	}.elsewhen(io.dst_addr === UInt(1)){
-		io.route_out := UInt(b"0111000000")
+		io.route_out := UInt("b0111000000")
 	}.elsewhen(io.dst_addr === UInt(2)){
-		io.route_out := UInt(b"1001110000")
+		io.route_out := UInt("b1001110000")
 	}.elsewhen(io.dst_addr === UInt(3)){
-		io.route_out := UInt(b"1010010111")
+		io.route_out := UInt("b1010010111")
 	}.elsewhen(io.dst_addr === UInt(4)){
-		io.route_out := UInt(b"0101110000")
+		io.route_out := UInt("b0101110000")
 	}.elsewhen(io.dst_addr === UInt(5)){
-		io.route_out := UInt(b"1001011100")
+		io.route_out := UInt("b1001011100")
 	}.elsewhen(io.dst_addr === UInt(6)){
-		io.route_out := UInt(b"1010110000")
+		io.route_out := UInt("b1010110000")
 	}.elsewhen(io.dst_addr === UInt(8)){
-		io.route_out := UInt(b"1011000000")
+		io.route_out := UInt("b1011000000")
+	}.otherwise{
+		io.route_out := UInt("b0000000000")
 	}
 }
