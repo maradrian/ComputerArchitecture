@@ -22,9 +22,9 @@ class TX() extends Module {
 
 	//Data for/from Look-up table for the route
 	val dst_addr = Output(UInt(width = 4))
-	val route_out = Input(UInt(width = 15))
+	val route_out = Input(UInt(width = 10))
  }
- val unused_bits = Reg(init = Bits(0, 16))
+ val unused_bits = Reg(init = Bits(0, 21))
  val response = Reg(init = Bits(0, 32))
 
  //Read cmd by default
@@ -55,7 +55,7 @@ class TXTest(dut: TX) extends Tester(dut){
    poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => b001
    poke(dut.io.fromOCP.M.Addr, 0xe8010001)
    poke(dut.io.fromOCP.M.Data, 0xbadcaffe)
-   poke(dut.io.route_out, 0x7fff) //Simulate route for now - 15bits
+   poke(dut.io.route_out, 0x3ff) //Simulate route for now - 10bits
    
    poke(dut.io.TXValidFromOCP, true) //Valid from OCP
    poke(dut.io.TXReadyFromRouter, true) //Ready from Router
@@ -72,7 +72,7 @@ class TXTest(dut: TX) extends Tester(dut){
    poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => b001
    poke(dut.io.fromOCP.M.Addr, 0xe8020002)
    poke(dut.io.fromOCP.M.Data, 0xdeadface)
-   poke(dut.io.route_out, 0x6abc) //Simulate route for now - 15bits
+   poke(dut.io.route_out, 0x2bc) //Simulate route for now - 10bits
    
    poke(dut.io.TXValidFromOCP, false) //Valid from OCP
    poke(dut.io.TXReadyFromRouter, false) //Ready from Router
@@ -89,7 +89,7 @@ class TXTest(dut: TX) extends Tester(dut){
    poke(dut.io.fromOCP.M.Cmd, 0x1) //Write => b001
    poke(dut.io.fromOCP.M.Addr, 0xe8030003)
    poke(dut.io.fromOCP.M.Data, 0xdeafbabe)
-   poke(dut.io.route_out, 0x1dad) //Simulate route for now - 15bits
+   poke(dut.io.route_out, 0x1ad) //Simulate route for now - 10bits
    
    poke(dut.io.TXValidFromOCP, true) //Valid from OCP
    poke(dut.io.TXReadyFromRouter, false) //Ready from Router
@@ -106,7 +106,7 @@ class TXTest(dut: TX) extends Tester(dut){
    poke(dut.io.fromOCP.M.Cmd, 0x2) //Read => b010
    poke(dut.io.fromOCP.M.Addr, 0xe8040004)
    poke(dut.io.fromOCP.M.Data, 0xdeafbabe)
-   poke(dut.io.route_out, 0x0111) //Simulate route for now - 15bits
+   poke(dut.io.route_out, 0x111) //Simulate route for now - 10bits
    
    poke(dut.io.TXValidFromOCP, true) //Valid from OCP
    poke(dut.io.TXReadyFromRouter, false) //Ready from Router
