@@ -12,7 +12,7 @@ import NOC.RX._
 import NOC.Decoder._
 import NOC.Memory._
 import NOC.OcpHandshakeComponent._
-
+import NOC.TXTop._
 
 //import NOC._
 class Top(val address : Int = 0) extends Module(){
@@ -24,6 +24,9 @@ class Top(val address : Int = 0) extends Module(){
     val routerPacketOut = Input(UInt(width = 96))
     val routerValidOut = Input(Bool())
     val routerReadyIn = Output(Bool()) 
+    //Data for/from Look-up table for the route
+    val dst_addr = Output(UInt(width = 4))
+    val route_out = Input(UInt(width = 10))
   }
 
   val ocpHandshake = Module(new Handshake())
@@ -71,5 +74,9 @@ class Top(val address : Int = 0) extends Module(){
   io.routerReadyIn := rx.io.ready
   rx.io.valid := io.routerValidOut
   rx.io.packet := io.routerPacketOut 
+  
+  //connecting LUTs
+  tx.io.route_out := io.route_out
+  io.dst_addr:= tx.io.dst_addr
 }
 
