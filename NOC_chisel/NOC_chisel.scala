@@ -1,22 +1,24 @@
-package NOC_chisel
+package NOC.NOC_chisel
+
+import Chisel._
 
 
-class NOC_chisel(packet_width: Int = 96, no_of_routers: Int) extends Blackbox{
+class NOC_chisel(packet_width: Int = 96, no_of_routers: Int = 9) extends BlackBox {
 	val io = new Bundle() {
 			//INPUT
-			val local_packet_in = Vec(no_of_routers, BITS(OUTPUT, width = packet_width))
-			val local_valid_in = Vec(no_of_routers, BITS(OUTPUT, width = 1))
-			val local_ready_out = Vec(no_of_routers, BITS(INPUT, width = 1))
+			val local_packet_in = Vec(no_of_routers, Bits(OUTPUT, width = packet_width))
+			val local_valid_in = Vec(no_of_routers, Bits(OUTPUT, width = 1))
+			val local_ready_out = Vec(no_of_routers, Bits(INPUT, width = 1))
 			//OUTPUT
-			val local_packet_out = Vec(no_of_routers, BITS(INPUT, width = packet_width))
-			val local_valid_out = Vec(no_of_routers, BITS(INPUT, width = 1))
-			val local_ready_in = Vec(no_of_routers, BITS(OUTPUT, width = 1))
-
-		} with NOC_chisel.Pins
+			val local_packet_out = Vec(no_of_routers, Bits(INPUT, width = packet_width))
+			val local_valid_out = Vec(no_of_routers, Bits(INPUT, width = 1))
+			val local_ready_in = Vec(no_of_routers, Bits(OUTPUT, width = 1))
+			val i = Bits(OUTPUT, width = 1)
+		} 
 
 	setModuleName("noc_top")
 
-	renameClock(clock, clk)
+	renameClock(clock, "clk")
 	reset.setName("rst")
 
 	var i = 0
