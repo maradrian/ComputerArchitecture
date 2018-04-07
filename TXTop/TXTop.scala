@@ -8,7 +8,7 @@ import NOC.Route._
 
 import ocp._
 
-class TXTop() extends Module {
+class TXTop(addr: Int = 0) extends Module {
  val io = new Bundle{
       	//Data from OCPHandshake
       	val fromOCP = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)
