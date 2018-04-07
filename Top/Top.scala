@@ -12,7 +12,7 @@ import NOC.RX._
 import NOC.Decoder._
 import NOC.Memory._
 import NOC.OcpHandshakeComponent._
-
+import NOC.TXTop._
 
 //import NOC._
 class Top(val address : Int = 0) extends Module(){
@@ -31,7 +31,7 @@ class Top(val address : Int = 0) extends Module(){
   val dataDecoder = Module(new DataDecoder())
   val ocpMemoryRead = Module(new OcpMemoryRead())
   val memory = Module(new Memory())
-  val tx = Module(new TX())
+  val tx = Module(new TXTop())
   val rx = Module(new RX())
   
   //connects NIC with Patmos
