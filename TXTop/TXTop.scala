@@ -21,10 +21,6 @@ class TXTop() extends Module {
       	val TXReadyFromRouter = Input(Bool())
       	val TXValidToRouter = Output(Bool())
       	val packet = Output(UInt(width = 96))
-
-	//Data for/from Look-up table for the route
-	val dst_addr = Output(UInt(width = 4))
-	val route_out = Input(UInt(width = 10))
  }
  val tx = Module(new TX())
  val lut0 = Module(new LUT_0())
