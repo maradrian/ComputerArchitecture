@@ -2,11 +2,12 @@ package NOC.Route
 
 import Chisel._
 
-class LUT_6() extends Module(){
-	val io = IO(new Bundle{
+class LUT_6() extends Lut(){
+	override val io = IO(new Bundle{
 		val dst_addr = Input(UInt(width = 4))
 		val route_out = Output(UInt(width = 10))
 	})
+
 
 	when(io.dst_addr === UInt(0)){
 		io.route_out := UInt("b0111000000")
