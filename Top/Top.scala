@@ -80,3 +80,10 @@ class Top(val address : Int = 0) extends Module(){
   io.dst_addr:= tx.io.dst_addr
 }
 
+object Top {
+  def main(args: Array[String]): Unit = {
+    chiselMain(Array("--backend", "v"), () => Module(new Top(9)))
+  }
+}
+
+
