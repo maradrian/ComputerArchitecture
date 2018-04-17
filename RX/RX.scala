@@ -15,17 +15,21 @@ class RX() extends Module(){
 	})//true == write
 
 	
-
+	val worthless = Reg(init = Bits(0, 4))
+	worthless := Bits(0)
 
 	io.ready := Bool(true)
-	io.en := Bool(false)
+	io.en := worthless
 	io.dataOut := UInt(0)
 	io.addr := UInt(0)
 
 	when(io.valid === Bool(true)){
 		io.dataOut := io.packet(31, 0)
 		io.addr := io.packet(47, 32)
-		io.en := Bool(true)
+		//io.en := Bool(true)
+		worthless := Bits(1)
+	}.otherwise{
+		worthless := Bits(0)
 	}
 
 }
