@@ -21,13 +21,13 @@ class Wrapper(nrCores : Int) extends Module(){
    
    for (i <- 0 until nrCores){
       //connect to network
-      NoC.io.local_packet_out(i) <> NIs.io(i).routerPacketIn
-      NoC.io.local_valid_out(i) <> NIs.io(i).routerValidIn
-      NoC.io.local_ready_out(i) <> NIs.io(i).routerReadyIn
+      NoC.io.local_packet_in(i) <> NIs.io(i).routerPacketIn
+      NoC.io.local_valid_in(i) <> NIs.io(i).routerValidIn
+      NoC.io.local_ready_in(i) <> NIs.io(i).routerReadyIn
       //connect from network
-      NIs.io(i).routerPacketOut <> NoC.io.local_packet_in(i)
-      NIs.io(i).routerReadyOut <> NoC.io.local_ready_in(i)
-      NIs.io(i).routerValidOut <> NoC.io.local_valid_in(i)
+      NIs.io(i).routerPacketOut <> NoC.io.local_packet_out(i)
+      NIs.io(i).routerReadyOut <> NoC.io.local_ready_out(i)
+      NIs.io(i).routerValidOut <> NoC.io.local_valid_out(i)
       //connection with patmos
       NIs.io(i).fromProcessor.M <> io.io(i).fromProcessor.M
       NIs.io(i).fromProcessor.S <> io.io(i).fromProcessor.S
