@@ -24,8 +24,8 @@ class TX() extends Module {
 	val dst_addr = Output(UInt(width = 4))
 	val route_out = Input(UInt(width = 10))
  }
- val unused_bits = Reg(init = Bits(0, 21))
- val response = Reg(init = Bits(0, 32))
+ val unused_bits = Bits(0, 21)
+ val response = Bits(0, 32)
 
  //Read cmd by default
  val cmd_signal = Bits(width = 1) 
