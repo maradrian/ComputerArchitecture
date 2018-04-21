@@ -17,8 +17,12 @@ class NOC_chisel(packet_width: Int = 96, no_of_routers: Int = 9) extends BlackBo
 
 	setModuleName("noc_top")
 
+	//Add explicit clock
+	addClock(Driver.implicitClock)
+
 	renameClock(clock, "clk")
 	reset.setName("rst")
+	//clock.setName("clk")
 
 
 	for( a <- 0 until no_of_routers){
