@@ -15,6 +15,32 @@ x_axis = '10'
 y_axis = '01'
 local = '11'
 package = 'package NOC.Route\n'
+eastP = 'east_packet_out'
+southP = 'south_packet_out'
+eastR = 'east_ready_in'
+southR = 'south_ready_in'
+mType = ': packet_m_type;'
+sType = ': packet_s_type;\n'
+
+def getFancyIndex(i):
+	if i == 0:
+		return '(0)(0)'
+	elif i == 1:
+		return '(0)(1)'
+	elif i == 2:
+		return '(0)(2)'
+	elif i == 3:
+		return '(1)(0)'
+	elif i == 4:
+		return '(1)(1)'
+	elif i == 5:
+		return '(1)(2)'
+	elif i == 6:
+		return '(2)(0)'
+	elif i == 7:
+		return '(2)(1)'
+	elif i == 8:
+		return '(2)(2)'
 
 def get_next(currRout, row): #returns the next node in the specified row/column
 	i = 0
@@ -28,6 +54,19 @@ def get_next(currRout, row): #returns the next node in the specified row/column
 				next_id = row[0]
 				return next_id
 		i+=1
+
+def get_north_in(i):
+	if i in x_row1:
+		return '_' + str(i+6)
+	else:
+		return '_' + str(i-3)
+
+def get_west_in(i):
+	if i in y_col1:
+		return '_' + str(i+2)
+	else:
+		return '_' + str(i-1)
+
 
 
 #returns the route in string format e.g. '1010001011'
@@ -95,4 +134,32 @@ def generate_luts(ids, row1, row2, row3, col1, col2, col3):
 		file.write('\t\tio.route_out := UInt(\"b0000000000\")\n')
 		file.write('\t}')
 		file.write('\n}')
-generate_luts(ids, x_row1, x_row2, x_row3, y_col1, y_col2, y_col3)
+
+def generate_signals():
+	i = 0
+	while i < 9:
+		print('signal ' + eastP + '_' + str(i) + ', ' + southP + '_' + str(i) + mType)
+		print('signal ' + eastR + '_' + str(i) + ', ' + southR + '_' + str(i) + sType)
+		i+=1
+
+def gen_portmap():
+	i = 0
+	while i < 9:
+		print('\trouter'+str(i)+': router PORT MAP(\n\tclk => clk, rst => reset,')
+		print('\t\trouter_north_packet_in => ' + southP + get_north_in(i) + ',')
+		print('\t\trouter_north_ready_out => ' + southR + get_north_in(i) + ',')
+		print('\t\trouter_east_packet_out => ' + eastP + '_' + str(i) + ',')
+		print('\t\trouter_east_ready_in => ' + eastR + '_' + str(i) + ',')
+		print('\t\trouter_south_packet_out => ' + southP + '_' + str(i) + ',')
+		print('\t\trouter_south_ready_in => ' + southR + '_' + str(i) + ',')
+		print('\t\trouter_west_packet_in => ' + eastP + get_west_in(i) + ',')
+		print('\t\trouter_west_ready_out => ' + eastR + get_west_in(i) + ',')
+		print('\t\trouter_local_packet_in => local_packet_in' + getFancyIndex(i) + ',')
+		print('\t\trouter_local_ready_out => local_ready_out' + getFancyIndex(i) + ',')
+		print('\t\trouter_local_packet_out => local_packet_out' + getFancyIndex(i) + ',')
+		print('\t\trouter_local_ready_in => local_ready_in' + getFancyIndex(i))
+		print('\t);\n\n')
+
+		i+=1
+
+gen_portmap()

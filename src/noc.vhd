@@ -20,71 +20,220 @@ end noc;
 
 architecture struct of noc is
 
-------------------------------Signal declarations----------------------------
- signal north_in_f  : link_m_f;
- signal north_out_b : link_m_b;
- signal east_out_f  : link_m_f;
- signal east_in_b   : link_m_b;
- signal south_out_f : link_m_f;
- signal south_in_b  : link_m_b;
- signal west_in_f   : link_m_f;
- signal west_out_b  : link_m_b;
+------------------------------ NEW SIGNALS ----------------------------
+signal east_packet_out_0, south_packet_out_0: packet_m_type;
+signal east_ready_in_0, south_ready_in_0: packet_s_type;
+
+signal east_packet_out_1, south_packet_out_1: packet_m_type;
+signal east_ready_in_1, south_ready_in_1: packet_s_type;
+
+signal east_packet_out_2, south_packet_out_2: packet_m_type;
+signal east_ready_in_2, south_ready_in_2: packet_s_type;
+
+signal east_packet_out_3, south_packet_out_3: packet_m_type;
+signal east_ready_in_3, south_ready_in_3: packet_s_type;
+
+signal east_packet_out_4, south_packet_out_4: packet_m_type;
+signal east_ready_in_4, south_ready_in_4: packet_s_type;
+
+signal east_packet_out_5, south_packet_out_5: packet_m_type;
+signal east_ready_in_5, south_ready_in_5: packet_s_type;
+
+signal east_packet_out_6, south_packet_out_6: packet_m_type;
+signal east_ready_in_6, south_ready_in_6: packet_s_type;
+
+signal east_packet_out_7, south_packet_out_7: packet_m_type;
+signal east_ready_in_7, south_ready_in_7: packet_s_type;
+
+signal east_packet_out_8, south_packet_out_8: packet_m_type;
+signal east_ready_in_8, south_ready_in_8: packet_s_type;
 ------------------------------------------------------------
+
+  component router
+  port( 
+  clk, rst : in std_logic;
+
+  -- North
+  router_north_packet_in : in packet_m_type;
+  router_north_ready_out: out packet_s_type;
+  
+  -- East
+  router_east_packet_out : out packet_m_type;
+  router_east_ready_in: in packet_s_type;
+  
+  -- South
+  router_south_packet_out : out packet_m_type;
+  router_south_ready_in: in packet_s_type;
+  
+  -- West
+  router_west_packet_in : in packet_m_type;
+  router_west_ready_out: out packet_s_type;
+  
+  -- Local input
+  router_local_packet_in : in packet_m_type;
+  router_local_ready_out: out packet_s_type;
+  
+  -- Local output
+  router_local_packet_out : out packet_m_type;
+  router_local_ready_in: in packet_s_type
+);
+  end component;
+  
+  
 
 begin
 
-  router_m : for i in 0 to M-1 generate
-    router_n : for j in 0 to N-1 generate
-      router : entity work.router
-        port map (
-          clk => clk,
-          rst => reset,
+router0: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_6,
+    router_north_ready_out => south_ready_in_6,
+    router_east_packet_out => east_packet_out_0,
+    router_east_ready_in => east_ready_in_0,
+    router_south_packet_out => south_packet_out_0,
+    router_south_ready_in => south_ready_in_0,
+    router_west_packet_in => east_packet_out_2,
+    router_west_ready_out => east_ready_in_2,
+    router_local_packet_in => local_packet_in(0)(0),
+    router_local_ready_out => local_ready_out(0)(0),
+    router_local_packet_out => local_packet_out(0)(0),
+    router_local_ready_in => local_ready_in(0)(0)
+  );
 
-          router_north_packet_in => north_in_f(i)(j),
-          router_north_ready_out => north_out_b(i)(j),
-          router_east_packet_out  => east_out_f(i)(j),
-          router_east_ready_in  => east_in_b(i)(j),
-          router_south_packet_out => south_out_f(i)(j),
-          router_south_ready_in => south_in_b(i)(j),
-          router_west_packet_in  => west_in_f(i)(j),
-          router_west_ready_out  => west_out_b(i)(j),
-          
-           -- Local input
-          router_local_packet_in => local_packet_in(i)(j),
-          router_local_ready_out => local_ready_out(i)(j),         
-           -- Local output
-          router_local_packet_out => local_packet_out(i)(j),
-          router_local_ready_in => local_ready_in(i)(j)
-          );
-    end generate router_n;
-  end generate router_m;
 
-  --Interconnections
-  links_m : for i in 0 to M-1 generate
-    links_n : for j in 0 to N-1 generate
-      top : if (i = 0) generate
-        north_in_f(i)(j)    <= south_out_f(M-1)(j);
-        north_out_b(i)(j)   <= south_in_b(M-1)(j);
-      end generate top;
-      left : if (j = 0) generate
-        west_in_f(i)(j)    <= east_out_f(i)(N-1);
-        west_out_b(i)(j)   <= east_in_b(i)(N-1);
-      end generate left;
-      bottom : if (i = (M-1) and j < (N-1)) generate
-        west_out_b(i)(j+1) <= east_in_b(i)(j);
-        west_in_f(i)(j+1)  <= east_out_f(i)(j);
-      end generate bottom;
-      right : if (i < (M-1) and j = (N-1)) generate
-        north_out_b(i+1)(j) <= south_in_b(i)(j);
-        north_in_f(i+1)(j)  <= south_out_f(i)(j);
-      end generate right;
-      center : if (i < (M-1) and j < (N-1)) generate
-        north_in_f(i+1)(j)  <= south_out_f(i)(j);
-        north_out_b(i+1)(j) <= south_in_b(i)(j);
-        west_in_f(i)(j+1)   <= east_out_f(i)(j);
-        west_out_b(i)(j+1)  <= east_in_b(i)(j);
-      end generate center;
-    end generate links_n;
-  end generate links_m;
+  router1: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_7,
+    router_north_ready_out => south_ready_in_7,
+    router_east_packet_out => east_packet_out_1,
+    router_east_ready_in => east_ready_in_1,
+    router_south_packet_out => south_packet_out_1,
+    router_south_ready_in => south_ready_in_1,
+    router_west_packet_in => east_packet_out_0,
+    router_west_ready_out => east_ready_in_0,
+    router_local_packet_in => local_packet_in(0)(1),
+    router_local_ready_out => local_ready_out(0)(1),
+    router_local_packet_out => local_packet_out(0)(1),
+    router_local_ready_in => local_ready_in(0)(1)
+  );
+
+
+  router2: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_8,
+    router_north_ready_out => south_ready_in_8,
+    router_east_packet_out => east_packet_out_2,
+    router_east_ready_in => east_ready_in_2,
+    router_south_packet_out => south_packet_out_2,
+    router_south_ready_in => south_ready_in_2,
+    router_west_packet_in => east_packet_out_1,
+    router_west_ready_out => east_ready_in_1,
+    router_local_packet_in => local_packet_in(0)(2),
+    router_local_ready_out => local_ready_out(0)(2),
+    router_local_packet_out => local_packet_out(0)(2),
+    router_local_ready_in => local_ready_in(0)(2)
+  );
+
+
+  router3: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_0,
+    router_north_ready_out => south_ready_in_0,
+    router_east_packet_out => east_packet_out_3,
+    router_east_ready_in => east_ready_in_3,
+    router_south_packet_out => south_packet_out_3,
+    router_south_ready_in => south_ready_in_3,
+    router_west_packet_in => east_packet_out_5,
+    router_west_ready_out => east_ready_in_5,
+    router_local_packet_in => local_packet_in(1)(0),
+    router_local_ready_out => local_ready_out(1)(0),
+    router_local_packet_out => local_packet_out(1)(0),
+    router_local_ready_in => local_ready_in(1)(0)
+  );
+
+
+  router4: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_1,
+    router_north_ready_out => south_ready_in_1,
+    router_east_packet_out => east_packet_out_4,
+    router_east_ready_in => east_ready_in_4,
+    router_south_packet_out => south_packet_out_4,
+    router_south_ready_in => south_ready_in_4,
+    router_west_packet_in => east_packet_out_3,
+    router_west_ready_out => east_ready_in_3,
+    router_local_packet_in => local_packet_in(1)(1),
+    router_local_ready_out => local_ready_out(1)(1),
+    router_local_packet_out => local_packet_out(1)(1),
+    router_local_ready_in => local_ready_in(1)(1)
+  );
+
+
+  router5: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_2,
+    router_north_ready_out => south_ready_in_2,
+    router_east_packet_out => east_packet_out_5,
+    router_east_ready_in => east_ready_in_5,
+    router_south_packet_out => south_packet_out_5,
+    router_south_ready_in => south_ready_in_5,
+    router_west_packet_in => east_packet_out_4,
+    router_west_ready_out => east_ready_in_4,
+    router_local_packet_in => local_packet_in(1)(2),
+    router_local_ready_out => local_ready_out(1)(2),
+    router_local_packet_out => local_packet_out(1)(2),
+    router_local_ready_in => local_ready_in(1)(2)
+  );
+
+
+  router6: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_3,
+    router_north_ready_out => south_ready_in_3,
+    router_east_packet_out => east_packet_out_6,
+    router_east_ready_in => east_ready_in_6,
+    router_south_packet_out => south_packet_out_6,
+    router_south_ready_in => south_ready_in_6,
+    router_west_packet_in => east_packet_out_8,
+    router_west_ready_out => east_ready_in_8,
+    router_local_packet_in => local_packet_in(2)(0),
+    router_local_ready_out => local_ready_out(2)(0),
+    router_local_packet_out => local_packet_out(2)(0),
+    router_local_ready_in => local_ready_in(2)(0)
+  );
+
+
+  router7: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_4,
+    router_north_ready_out => south_ready_in_4,
+    router_east_packet_out => east_packet_out_7,
+    router_east_ready_in => east_ready_in_7,
+    router_south_packet_out => south_packet_out_7,
+    router_south_ready_in => south_ready_in_7,
+    router_west_packet_in => east_packet_out_6,
+    router_west_ready_out => east_ready_in_6,
+    router_local_packet_in => local_packet_in(2)(1),
+    router_local_ready_out => local_ready_out(2)(1),
+    router_local_packet_out => local_packet_out(2)(1),
+    router_local_ready_in => local_ready_in(2)(1)
+  );
+
+
+  router8: router PORT MAP(
+  clk => clk, rst => reset,
+    router_north_packet_in => south_packet_out_5,
+    router_north_ready_out => south_ready_in_5,
+    router_east_packet_out => east_packet_out_8,
+    router_east_ready_in => east_ready_in_8,
+    router_south_packet_out => south_packet_out_8,
+    router_south_ready_in => south_ready_in_8,
+    router_west_packet_in => east_packet_out_7,
+    router_west_ready_out => east_ready_in_7,
+    router_local_packet_in => local_packet_in(2)(2),
+    router_local_ready_out => local_ready_out(2)(2),
+    router_local_packet_out => local_packet_out(2)(2),
+    router_local_ready_in => local_ready_in(2)(2)
+  );
+
   
 end struct;
