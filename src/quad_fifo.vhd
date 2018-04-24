@@ -56,7 +56,7 @@ END quad_fifo;
 ARCHITECTURE quad_fifo_arch OF quad_fifo IS
 
   COMPONENT fifo IS
-    GENERIC ( WIDTH : positive := 6 );
+    GENERIC ( WIDTH : positive := 3 );
     PORT (
       clk, rst : in std_logic;
       mPacket_in : in packet_m_type;
