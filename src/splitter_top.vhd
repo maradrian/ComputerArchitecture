@@ -68,7 +68,7 @@ component splitter
 end component;
 
   COMPONENT fifo IS
-    GENERIC ( WIDTH : positive := 3 );
+    GENERIC ( WIDTH : positive := 2 );
     PORT (
       clk, rst : in std_logic;
       mPacket_in : in packet_m_type;
