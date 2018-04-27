@@ -13,25 +13,25 @@ class Memory() extends Module{
 	val dataIn = Input(UInt(width = 32))
 	val dataOut = Output(UInt(width = 32))
 	val enable = Input(Bool())
-  val addr2 = Input(UInt(width = 16))
+        val addr2 = Input(UInt(width = 16))
 	val dataIn2 = Input(UInt(width = 32))
-  val dataOut2 = Output(UInt(width = 32))  
-  val enable2 = Input(Bool())
- })   
-   val syncMem = Mem(UInt(width=32), 8192, seqRead=true)
+        val dataOut2 = Output(UInt(width = 32))  
+        val enable2 = Input(Bool())
+     })
+   val syncMem = Mem(UInt(width=32), 65536, seqRead=true)
    
-   when(io.enable === Bool(true) ) {
+    /*when(io.enable === Bool(true) ) {
       syncMem(io.addr) := io.dataIn
-    }/*
+    }*/
     when(io.enable2 === Bool(true)){
       syncMem(io.addr2) := io.dataIn2
-    }*/
+    }
 
   // read
-  //val rdAddrReg  = Reg(next = io.addr)
-  val rdAddrReg2 = Reg(next = io.addr2)
-  //io.dataOut  := syncMem(rdAddrReg)
-  io.dataOut2 := syncMem(rdAddrReg2)
+  val rdAddrReg  = Reg(next = io.addr)
+  //val rdAddrReg2 = Reg(next = io.addr2)
+  io.dataOut  := syncMem(rdAddrReg)
+  //io.dataOut2 := syncMem(rdAddrReg2)
 }
 
 class MemoryTest(dut: Memory) extends Tester(dut){
