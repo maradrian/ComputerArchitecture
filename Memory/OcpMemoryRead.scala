@@ -12,8 +12,9 @@ class OcpMemoryRead() extends Module {
     val addr = Output(UInt(width = 16))
     val dataIn = Input(UInt(width = 32))
     val fromCore = new OcpCoreSlavePort(ADDR_WIDTH, DATA_WIDTH)
-    val enable = Output(Bool())
+    val enable = Output(UInt(width = 2))
     val dataOut = Output(UInt(width = 32))
+    val readyIn = Input(Bool())
   }
   
   val waitForCmd :: rdAddress :: sendBackData :: writeData :: Nil = Enum(UInt(), 4)
@@ -26,33 +27,39 @@ class OcpMemoryRead() extends Module {
   io.fromCore.S.Resp := OcpResp.NULL
   io.addr := rdAddr
   io.dataOut := dataOutReg
-  io.enable := Bool(false)
+  io.enable := UInt(0)
 
   when (stateReg === waitForCmd){
      when(masterReg.Cmd === OcpCmd.RD){
         stateReg := rdAddress
-	rdAddr := masterReg.Addr(15, 0)
+  rdAddr := masterReg.Addr(15, 0)
      }.elsewhen(masterReg.Cmd === OcpCmd.WR){
         stateReg := writeData
-	rdAddr := masterReg.Addr(15, 0)
-	dataOutReg := masterReg.Data
+  rdAddr := masterReg.Addr(15, 0)
+  dataOutReg := masterReg.Data
      }.otherwise{
-	masterReg := io.fromCore.M
+  masterReg := io.fromCore.M
      }
   }
   when(stateReg === rdAddress){
+    io.enable := UInt(2)
+    when(io.readyIn === Bool(true)){
      stateReg := sendBackData
+   }
   }
   when(stateReg === sendBackData){
      stateReg := waitForCmd
+     io.enable := UInt(0)
      io.fromCore.S.Resp := OcpResp.DVA
      masterReg := io.fromCore.M
   }
   when(stateReg === writeData){
+    io.enable := UInt(1)
+    when(io.readyIn === Bool(true)){
      stateReg := waitForCmd
      io.fromCore.S.Resp := OcpResp.DVA
-     io.enable := Bool(true)
      masterReg := io.fromCore.M
+   }
   }
 }
 
@@ -60,40 +67,68 @@ class OcpMemoryReadTest(dut: OcpMemoryRead) extends Tester(dut){
   poke(dut.io.fromCore.M.Cmd, 0x1)
   poke(dut.io.fromCore.M.Addr, 0xe8000001)
   poke(dut.io.fromCore.M.Data, 0xdeadbeef)
+  peek(dut.io.enable)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
   step(1)  
   poke(dut.io.fromCore.M.Cmd, 0x0)
-  poke(dut.io.fromCore.M.Addr, 0x0)
+  peek(dut.io.fromCore.M.Cmd)
+  peek(dut.io.fromCore.M.Addr)
+  peek(dut.io.addr)
+  peek(dut.io.fromCore.S.Resp) 
+  peek(dut.io.fromCore.M.Addr)
+  peek(dut.io.fromCore.S.Resp)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
+  step(1)  
+  poke(dut.io.readyIn, 0x1)
+  poke(dut.io.fromCore.M.Cmd, 0x0)
+  peek(dut.io.fromCore.M.Cmd)
+  peek(dut.io.fromCore.M.Addr)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
   peek(dut.io.enable)
   peek(dut.io.dataOut)
   step(1)  
+  poke(dut.io.readyIn, 0x0)
   poke(dut.io.fromCore.M.Cmd, 0x0)
-  poke(dut.io.fromCore.M.Addr, 0x0)
+  peek(dut.io.fromCore.M.Cmd)
+  peek(dut.io.fromCore.M.Addr)
   peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp)
-  step(1)  
-  poke(dut.io.fromCore.M.Cmd, 0x2)
-  poke(dut.io.fromCore.M.Addr, 0xe8000001)
-  peek(dut.io.addr)
-  peek(dut.io.fromCore.S.Resp)
-  step(1)
-  poke(dut.io.fromCore.M.Cmd, 0x0)
-  poke(dut.io.fromCore.M.Addr, 0x0)
-  peek(dut.io.fromCore.S.Resp)
-  peek(dut.io.addr)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
   step(1)
   poke(dut.io.fromCore.M.Cmd, 0x2)
-  poke(dut.io.fromCore.M.Addr, 0xe800000f)
+  poke(dut.io.fromCore.M.Addr, 0x2)
+  peek(dut.io.fromCore.M.Cmd)
+  peek(dut.io.fromCore.M.Addr)
+  peek(dut.io.addr)
   peek(dut.io.fromCore.S.Resp) 
-  peek(dut.io.addr)
+  peek(dut.io.fromCore.M.Addr)
+  peek(dut.io.fromCore.S.Resp)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
   step(1)
   poke(dut.io.fromCore.M.Cmd, 0x0)
-  poke(dut.io.fromCore.M.Addr, 0x0)
-  peek(dut.io.fromCore.S.Resp)
+  poke(dut.io.readyIn, 0x1)
+  peek(dut.io.fromCore.M.Cmd)
+  peek(dut.io.fromCore.M.Addr)
   peek(dut.io.addr)
+  peek(dut.io.fromCore.S.Resp)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
+  step(1)
+  peek(dut.io.fromCore.M.Cmd)
+  peek(dut.io.fromCore.M.Addr)
+  peek(dut.io.addr)
+  peek(dut.io.fromCore.S.Resp)
+  peek(dut.io.enable)
+  peek(dut.io.dataOut)
   step(1)
   poke(dut.io.fromCore.M.Cmd, 0x0)
   poke(dut.io.fromCore.M.Addr, 0x0)
