@@ -56,7 +56,7 @@ class NICLoopbackTest(dut: TestInterfaces) extends Tester(dut){
    step(1)
    step(1)
    poke(dut.io.fromProcessor.M.Cmd, 0x1)
-   poke(dut.io.fromProcessor.M.Addr, 0xe8019430)
+   poke(dut.io.fromProcessor.M.Addr, 0xe8009430)
    poke(dut.io.fromProcessor.M.Data, 0xdeadbeef)
    step(1)
    poke(dut.io.fromProcessor.M.Cmd, 0x0)

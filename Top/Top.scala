@@ -13,6 +13,7 @@ import NOC.Decoder._
 import NOC.Memory._
 import NOC.OcpHandshakeComponent._
 import NOC.TXTop._
+import NOC.MemoryArbiter._
 
 //import NOC._
 class Top(val address : Int = 0) extends Module(){
@@ -36,6 +37,7 @@ class Top(val address : Int = 0) extends Module(){
   val memory = Module(new Memory())
   val tx = Module(new TX())
   val rx = Module(new RX())
+  val arbiter = Module(new MemoryArbiter())
   
   //connects NIC with Patmos
   addressDecoder.io.fromPatmos <> io.fromProcessor.M   //address decoder takes OCP master signals (CMD, addr, data and MByteEns)
@@ -46,18 +48,25 @@ class Top(val address : Int = 0) extends Module(){
   ocpMemoryRead.io.fromCore.M <> addressDecoder.io.toMemoryRead
   ocpHandshake.io.fromCore.S <> dataDecoder.io.fromHandshake 
   ocpMemoryRead.io.fromCore.S <> dataDecoder.io.fromMemoryRead
-  
-  //connecting ocp memory read component(again this weird name)
-  memory.io.addr2 := ocpMemoryRead.io.addr
-  ocpMemoryRead.io.dataIn := memory.io.dataOut2
-  memory.io.enable2 := ocpMemoryRead.io.enable
-  memory.io.dataIn2 := ocpMemoryRead.io.dataOut
 
-  //connecting RX with memory
-  memory.io.addr := rx.io.addr
-  memory.io.dataIn := rx.io.dataOut
-  rx.io.dataIn := memory.io.dataOut
-  memory.io.enable := rx.io.en
+  //Connecting OcpMemoryRead with MemoryArbiter
+  arbiter.io.addrFromOcpMemoryRead := ocpMemoryRead.io.addr
+  ocpMemoryRead.io.dataIn := memory.io.dataOut2
+  arbiter.io.enableFromOcpMemoryRead := ocpMemoryRead.io.enable
+  arbiter.io.dataFromOcpMemoryRead := ocpMemoryRead.io.dataOut
+  ocpMemoryRead.io.readyIn := arbiter.io.readyToOcpMemoryRead
+
+  //Connecting RX with MemoryArbiter
+  arbiter.io.addrFromRX := rx.io.addr
+  arbiter.io.dataFromRX := rx.io.dataOut
+  rx.io.readyIn := arbiter.io.readyToRX
+  arbiter.io.enableFromRX := rx.io.en
+
+  //Connecting MemoryArbiter with Memory
+  memory.io.dataIn := arbiter.io.dataToMemory  
+  memory.io.addr2 := arbiter.io.addrToMemory
+  memory.io.enable := arbiter.io.enable
+  
 
   //connecting TX with handshake
   tx.io.fromOCP.M <> ocpHandshake.io.toTX.M

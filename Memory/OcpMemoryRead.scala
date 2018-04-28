@@ -157,7 +157,7 @@ class MemoryAndReadConnection() extends Module{
     val enable = Input(Bool())
   }
   
-  val ocpMemoryRead = Module(new OcpMemoryRead())
+  /*val ocpMemoryRead = Module(new OcpMemoryRead())
   val memory = Module(new Memory())
   
   memory.io.addr := io.addr
@@ -169,7 +169,7 @@ class MemoryAndReadConnection() extends Module{
   ocpMemoryRead.io.fromCore.M <> io.fromCore.M 
   ocpMemoryRead.io.fromCore.S <> io.fromCore.S
   memory.io.enable2 := ocpMemoryRead.io.enable
-  memory.io.dataIn2 := ocpMemoryRead.io.dataOut
+  memory.io.dataIn2 := ocpMemoryRead.io.dataOut*/
 }
 
 class MemoryAndReadConnectionTest(dut: MemoryAndReadConnection) extends Tester(dut){

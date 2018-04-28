@@ -11,13 +11,14 @@ class RX() extends Module(){
 		val dataOut = Output(UInt(width = 32))
 		val addr = Output(UInt(width = 16))
 		val ready = Output(Bool())
+		val readyIn = Input(Bool())
 		val en = Output(Bool())
 	})//true == write
 
 	
 
 
-	io.ready := Bool(true)
+	io.ready := io.readyIn
 	io.en := Bool(false)
 	io.dataOut := UInt(0)
 	io.addr := UInt(0)
