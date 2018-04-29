@@ -17,7 +17,7 @@ class Memory() extends Module{
   val dataOut2 = Output(UInt(width = 32))  
   //val enable2 = Input(Bool()) //DONT USE!!!
  })   
-   val syncMem = Mem(UInt(width=32), 8192, seqRead=true)
+   val syncMem = Mem(UInt(width=32), 1024, seqRead=true)
    
    when(io.enable === Bool(true) ) {
       syncMem(io.addr2) := io.dataIn
