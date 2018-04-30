@@ -20,12 +20,11 @@ class TX() extends Module {
       	val TXValidToRouter = Output(Bool())
       	val packet = Output(UInt(width = 96))
 
-	//Data for/from Look-up table for the route
-	val dst_addr = Output(UInt(width = 4))
-	val route_out = Input(UInt(width = 10))
+   	//Data for/from Look-up table for the route
+   	val dst_addr = Output(UInt(width = 4))
+   	val route_out = Input(UInt(width = 10))
  }
  val unused_bits = Bits(0, 21)
- val response = Bits(0, 32)
 
  //Read cmd by default
  val cmd_signal = Bits(width = 1) 
@@ -38,16 +37,12 @@ class TX() extends Module {
         cmd_signal := Bits(1)
  }.elsewhen(io.fromOCP.M.Cmd === OcpCmd.RD){
         cmd_signal := Bits(0)
- }.otherwise{
-	//Idle, do nothing
  }
 
  io.packet := Cat(unused_bits, cmd_signal, io.route_out, io.fromOCP.M.Addr, io.fromOCP.M.Data)
  io.TXValidToRouter := io.TXValidFromOCP
  io.TXReadyToOCP := io.TXReadyFromRouter
 
- io.fromOCP.S.Resp := OcpResp.DVA //Default DVA
- io.fromOCP.S.Data := response
 }
 
 class TXTest(dut: TX) extends Tester(dut){

@@ -5,6 +5,7 @@ import Node._
 import patmos.Constants._
 
 
+
 class MemoryArbiter() extends Module(){
 	val io = IO(new Bundle{
 		//From/to OCPMemoryRead
@@ -38,52 +39,33 @@ class MemoryArbiter() extends Module(){
 
 	//Firstly checking OCPReadMemory
 	when(stateReg === fromOCPReadMemory){
+		io.readyToOcpMemoryRead := Bool(true)
 		when(io.enableFromOcpMemoryRead === UInt(1)){		//ReadMem Write
 			io.readyToOcpMemoryRead := Bool(true)
 			io.dataToMemory := io.dataFromOcpMemoryRead
 			io.addrToMemory := io.addrFromOcpMemoryRead
 			io.enable := Bool(true)			
 			
-			stateReg := fromRX
 		}.elsewhen(io.enableFromOcpMemoryRead === UInt(2)){	//ReadMem Read
 			io.readyToOcpMemoryRead := Bool(true)
 			io.addrToMemory := io.addrFromOcpMemoryRead
 			io.enable := Bool(false)
-
-			stateReg := fromRX
-		}.elsewhen(io.enableFromRX){				//RX write
-			io.readyToRX := Bool(true)
-			io.dataToMemory := io.dataFromRX
-			io.addrToMemory := io.addrFromRX
-			io.enable := Bool(true)
-	
-			stateReg := fromOCPReadMemory	
-		}		
+		}
+		stateReg := fromRX
 	}
 
 	//Firstly checking RX
 	when(stateReg === fromRX){
+		io.readyToRX := Bool(true)	
 		when(io.enableFromRX){						//RX write
 			io.readyToRX := Bool(true)	
 			io.dataToMemory := io.dataFromRX
 			io.addrToMemory := io.addrFromRX
 			io.enable := Bool(true)
 
-			stateReg := fromOCPReadMemory
-		}.elsewhen(io.enableFromOcpMemoryRead === UInt(1)){		//ReadMem Write
-			io.readyToOcpMemoryRead := Bool(true)
-			io.dataToMemory := io.dataFromOcpMemoryRead
-			io.addrToMemory := io.addrFromOcpMemoryRead
-			io.enable := Bool(true)
-
-			stateReg := fromRX
-		}.elsewhen(io.enableFromOcpMemoryRead === UInt(2)){		//ReadMem Read
-			io.readyToOcpMemoryRead := Bool(true)
-			io.addrToMemory := io.addrFromOcpMemoryRead
-			io.enable := Bool(false)
-
-			stateReg := fromRX
-		}		
+			
+		}
+		stateReg := fromOCPReadMemory
 	}
 	   
 }

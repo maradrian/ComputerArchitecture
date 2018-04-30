@@ -14,7 +14,7 @@ class RX() extends Module(){
 		val readyIn = Input(Bool())
 		val en = Output(Bool())
 	})//true == write
-
+	val unused_bits = Bits(0, 2)
 	
 
 
@@ -25,7 +25,7 @@ class RX() extends Module(){
 
 	when(io.valid === Bool(true)){
 		io.dataOut := io.packet(31, 0)
-		io.addr := io.packet(47, 32)
+		io.addr := Cat(unused_bits, io.packet(47, 34))
 		io.en := Bool(true)
 	}
 

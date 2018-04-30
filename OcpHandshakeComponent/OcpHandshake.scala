@@ -14,7 +14,7 @@ class Handshake() extends Module {
       val TXValid = Output(Bool())//handshake has valid data
    }
    
-   val waitForCmd :: wr :: rd :: fromNIC :: Nil = Enum(UInt(), 4)//states cannot start with capital letters
+   val waitForCmd :: wr :: Nil = Enum(UInt(), 2)//states cannot start with capital letters
    val masterReg = Reg(init = io.fromCore.M)
    val stateReg = Reg(init = waitForCmd)
    val dataReg = Reg(init = io.toTX.S.Data)
@@ -27,16 +27,9 @@ class Handshake() extends Module {
    when(stateReg === waitForCmd){
      when(masterReg.Cmd === OcpCmd.WR){
         stateReg := wr
-     }.elsewhen(masterReg.Cmd === OcpCmd.RD){
-        stateReg := rd
      }.otherwise{
         masterReg := io.fromCore.M
      }
-     /*
-     when(io.toTX.S.Resp === OcpResp.DVA){
-        dataReg := io.toTX.S.Data
-        stateReg := fromNIC
-     }*/
    }
    when(stateReg === wr){
      io.TXValid := Bool(true)
@@ -45,20 +38,8 @@ class Handshake() extends Module {
        io.fromCore.S.Resp := OcpResp.DVA
        masterReg := io.fromCore.M
      }
-   }
-   when(stateReg === rd){
-     io.TXValid := Bool(true)
-     when(io.TXReady === Bool(true)){
-        stateReg := waitForCmd
-        masterReg := io.fromCore.M
-        //io.fromCore.S.Resp := OcpResp.DVA
-     }
-     
-   }
-   when(stateReg === fromNIC){
-      io.fromCore.S.Resp := OcpResp.DVA
-      stateReg := waitForCmd
-   }
+   } 
+   //masterReg = Reg(next = io.fromCore.M)
 }
 
 class HandshakeTest(dut: Handshake) extends Tester(dut){

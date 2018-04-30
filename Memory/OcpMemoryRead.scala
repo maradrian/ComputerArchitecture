@@ -32,13 +32,13 @@ class OcpMemoryRead() extends Module {
   when (stateReg === waitForCmd){
      when(masterReg.Cmd === OcpCmd.RD){
         stateReg := rdAddress
-  rdAddr := masterReg.Addr(15, 0)
+        rdAddr := masterReg.Addr(15, 0)
      }.elsewhen(masterReg.Cmd === OcpCmd.WR){
         stateReg := writeData
-  rdAddr := masterReg.Addr(15, 0)
-  dataOutReg := masterReg.Data
+        rdAddr := masterReg.Addr(15, 0)
+        dataOutReg := masterReg.Data
      }.otherwise{
-  masterReg := io.fromCore.M
+        masterReg := io.fromCore.M
      }
   }
   when(stateReg === rdAddress){
